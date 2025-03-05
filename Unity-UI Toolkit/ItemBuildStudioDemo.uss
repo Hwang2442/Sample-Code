@@ -1,0 +1,150 @@
+#mainContainer {
+    min-height: 100%;
+}
+
+#leftColumnContainer {
+    background-color: #3c3c3c;
+}
+
+#item {
+    font-size: 13px;
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    padding-left: 10px;
+    border-bottom-width: 1px;
+    border-color: #1a1a1a;
+}
+
+#itemTitle {
+    font-size: 16px;
+    -unity-font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    margin: 10px 0px 0px 5px;
+}
+
+#box {
+    background-color: #3f3f3f; 
+    border-width: 1px;
+    border-color: #1a1a1a;
+    padding: 2px;
+    margin: 8px 5px 8px 5px;
+    border-radius:3px;
+}
+
+#box.build-config {
+    flex-grow: 1;
+    margin-bottom: 10px;
+    padding: 0px;
+}
+
+.toolbar-button {
+    width: 20px;
+    height: 20px;
+}
+
+/* =====================
+   Platform Tab Buttons
+   ===================== */
+#platformTab {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.tab-button {
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    background-color: #353535;
+    border-color: #1a1a1a;
+    border-bottom-width: 1px;
+    border-right-width:1px;
+    padding: 3px 0px;
+}
+
+.tab-button:hover {
+    background-color: #303030;
+}
+
+.tab-button.last {
+    border-right-width: 0px;
+}
+
+.tab-button.selected {
+    border-bottom-width: 0px;
+    background-color: #3f3f3f;
+}
+
+/* ===============
+   Build List Area
+   =============== */
+#buildList {
+    display: flex;
+    flex-direction: column;
+    /* padding: 5px; */
+}
+
+#dragAndDropBox {
+    border-radius: 3px;
+    margin-left: 30px;
+    margin-right: 10px;
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    background-color: #212121;
+}
+
+#assetListView {
+    margin-top: 10px;
+    flex-grow: 1;
+    border-top-width: 1px;
+    border-color: #1a1a1a;
+}
+
+/* ==================
+   AssetBuildFormat ListView Items
+   ================== */
+#assetItem {
+    flex-direction: row;
+    align-items: center;
+    padding: 3px 8px;
+    border-bottom-width: 1px;
+    border-color: #1a1a1a;
+}
+
+#assetItem > #left {
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+#troItem > #right {
+    /* The area for the remove button */
+    width: 20px;
+    display: flex;
+}
+
+/* Left column in the troItem: icon + filename, then type + toggles */
+#fileNameIcon {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+/* Icon for each file (16x16 in code) */
+#icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+/* Filename label */
+#name {
+    font-size: 13px;
+    color: #ffffff;
+}
+
+/* Remove button */
+#remove {
+    width: 16px;
+    height: 16px;
+}
