@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using Unity.EditorCoroutines.Editor;
 
 namespace ItemBuildStudioDemo
 {
@@ -48,7 +49,7 @@ namespace ItemBuildStudioDemo
                         return;
 
                     SelectPlatformIndex = a;
-                    UpdateAssetBuildListView();
+                    RebuildAssetBuildListView();
                     for (int j = 0; j < platforms.Length; j++)
                     {
                         if (platformLabel.text == platforms[j])
@@ -83,6 +84,7 @@ namespace ItemBuildStudioDemo
             // Clear button
             Button clearButton = new Button(() =>
             {
+                BuildList.Clear();
                 UpdateAssetBuildListView();
             })
             { text = "Clear" };
@@ -92,6 +94,8 @@ namespace ItemBuildStudioDemo
             {
                 if (copiedBuildList != null)
                 {
+                    /* Paste */
+
                     UpdateAssetBuildListView();
                 }
             })
@@ -101,7 +105,7 @@ namespace ItemBuildStudioDemo
             // Copy button
             Button copyButton = new Button(() =>
             {
-
+                /* Copy list */
                 pasteButton.SetEnabled(true);
             })
             { text = "Copy" };
@@ -150,7 +154,7 @@ namespace ItemBuildStudioDemo
             if (itemBuildFormat.items == null)
                 itemBuildFormat.items = new Item[platforms.Length];
 
-            UpdateAssetBuildListView();
+            RebuildAssetBuildListView();
             copiedBuildList?.Clear();
             copiedBuildList = null;
         }
@@ -176,9 +180,10 @@ namespace ItemBuildStudioDemo
                 {
                     asset.isMain = BuildList.Count == 0;
                     BuildList.Add(asset);
-                    buildListView.Rebuild();
                 }
             }
+
+            UpdateAssetBuildListView();
         }
 
         #endregion
@@ -298,11 +303,27 @@ namespace ItemBuildStudioDemo
 
         private void UpdateAssetBuildListView()
         {
+            buildListView.itemsSource = BuildList;
+
+#if UNITY_2022_1_OR_NEWER
+            buildListView.RefreshItems();
+#else
+            buildListView.Refresh();
+#endif
+        }
+
+        private void RebuildAssetBuildListView()
+        {
             if (itemBuildFormat.items[SelectPlatformIndex] == null)
                 itemBuildFormat.items[SelectPlatformIndex] = new Item();
 
             buildListView.itemsSource = BuildList;
+
+#if UNITY_2022_1_OR_NEWER
             buildListView.Rebuild();
+#else
+            buildListView.Refresh();
+#endif
         }
 
         #endregion

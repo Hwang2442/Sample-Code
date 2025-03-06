@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
@@ -30,21 +31,9 @@ namespace ItemBuildStudioDemo
 
         private void Demo()
         {
-            
-        }
-
-        private void OnEnable()
-        {
-            Demo();
-
-            itemList.Clear();
-
-            Debug.Log("On Enable");
-        }
-
-        private void OnDisable()
-        {
-            Debug.Log("On Disable");
+            string path = "Assets/ItemBuildStudio Demo/Demo/01_Default_Item.json";
+            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+            itemList.Add(JsonUtility.FromJson<ItemBuildFormat>(jsonAsset.text));
         }
 
         public void CreateGUI()
@@ -52,11 +41,14 @@ namespace ItemBuildStudioDemo
             VisualElement root = rootVisualElement;
 
             // Apply uss
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/ItemBuildStudioDemo.uss");
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/ItemBuildStudio Demo/Editor/ItemBuildStudioDemo.uss");
             root.styleSheets.Add(styleSheet);
 
             // Create studio UI
             CreateVisualSplitter();
+
+            Demo();
+            UpdateItemListView();
 
             Debug.Log("Create Editor UI");
         }
@@ -171,7 +163,7 @@ namespace ItemBuildStudioDemo
             // Toolbar buttons
             var buildAndUpload = new ToolbarButton() { name = "buildAndUpload", text = "Build and Upload" };
             var buildButton = new ToolbarButton() { name = "build", text = "Build" };
-            var saveButton = new ToolbarButton() { name = "save", text = "Save" };
+            var saveButton = new ToolbarButton(SaveItemBuildFormat) { name = "save", text = "Save" };
             var uploadButton = new ToolbarButton() { name = "upload", text = "Upload" };
             var explorerButton = new ToolbarButton() { name = "explorer", text = "Explorer" };
 
@@ -228,7 +220,8 @@ namespace ItemBuildStudioDemo
                     displayItemList.Add(item);
             }
 
-            itemListView.Rebuild();
+            itemDetailContainer.visible = selectedItemFormat != null;
+            itemListView.RefreshItems();
         }
 
         private void DeleteItemBuildFormat()
@@ -236,9 +229,9 @@ namespace ItemBuildStudioDemo
             if (selectedItemFormat != null)
             {
                 itemList.Remove(selectedItemFormat);
-                UpdateItemListView();
-
                 selectedItemFormat = null;
+
+                UpdateItemListView();
             }
         }
 
@@ -261,6 +254,18 @@ namespace ItemBuildStudioDemo
                 itemBuildConfigBox.SetItemBuildConfig(selectedItemFormat);
 
                 break;
+            }
+        }
+
+        private void SaveItemBuildFormat()
+        {
+            if (selectedItemFormat != null)
+            {
+                string path = Path.Combine(Application.dataPath, "ItemBuildStudio Demo/Demo", selectedItemFormat.name + ".json");
+                string jsonString = JsonUtility.ToJson(selectedItemFormat);
+                File.WriteAllText(path, jsonString);
+
+                AssetDatabase.Refresh();
             }
         }
     }

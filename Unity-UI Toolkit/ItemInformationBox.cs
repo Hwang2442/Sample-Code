@@ -22,6 +22,8 @@ namespace ItemBuildStudioDemo
         private ObjectField iconField;
         private ObjectField[] screenshotFields;
 
+        private Action onEdit;
+
         public void CreateGUI()
         {
             // Title
@@ -38,7 +40,11 @@ namespace ItemBuildStudioDemo
             itemNameField = new TextField("Item Name");
             itemNameField.style.flexGrow = 1;
 
-            itemNameApplyButton = new Button() { text = "Apply" };
+            itemNameApplyButton = new Button(() =>
+            {
+                itemBuildFormat.name = itemNameField.value;
+                onEdit?.Invoke();
+            }) { text = "Apply" };
 
             itemNameEditField.Add(itemNameField);
             itemNameEditField.Add(itemNameApplyButton);
@@ -113,6 +119,8 @@ namespace ItemBuildStudioDemo
                     screenshotFields[i].value = AssetDatabase.LoadAssetAtPath(path, typeof(Texture));
                 }
             }
+
+            onEdit = onItemNameEdited;
         }
     }
 }
